@@ -1,8 +1,12 @@
 # Import required libraries
+import datetime
 import json
 import xmltodict
 import urllib.request
 import shutil
+
+# Store date
+todayDate = datetime.date.today()
 
 # Define FuelWatch RSS feed variables
 rssBase = "http://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS"
@@ -41,15 +45,13 @@ for x in Product:
     for y in StateRegion:
         rssURL = rssBase + "?Product=" + str(Product[x]) + "&StateRegion=" + str(StateRegion[y]) + "&Day=" + Day["today"]
 
-'''
-# Open FuelWatch RSS feed and save as XML file
-with urllib.request.urlopen("http://www.fuelwatch.wa.gov.au/fuelwatch/fuelWatchRSS") as response, open("fuelWatchRSS.xml", "wb") as xmlSave:
-    shutil.copyfileobj(response, xmlSave)
+        # Open FuelWatch RSS feed and save as XML file
+        with urllib.request.urlopen(rssURL) as response, open("files/" + str(todayDate) + "/fuelWatchRSS_" + x + "_" + y + ".xml", "wb") as xmlSave:
+            shutil.copyfileobj(response, xmlSave)
 
-# Open FuelWatch XML file and save as JSON file
-with open("fuelWatchRSS.xml") as xmlIn:
-    jsonSave = json.dumps(xmltodict.parse(xmlIn.read()), indent=4)
-    jsonFile = open("fuelWatchRSS.json", "w")
-    jsonFile.write(jsonSave)
-    jsonFile.close()
-'''
+        # Open FuelWatch XML file and save as JSON file
+        with open("files/" + str(todayDate) + "/fuelWatchRSS_" + x + "_" + y + ".xml") as xmlIn:
+            jsonSave = json.dumps(xmltodict.parse(xmlIn.read()), indent=4)
+            jsonFile = open("files/" + str(todayDate) + "/fuelWatchRSS_" + x + "_" + y + ".json", "w")
+            jsonFile.write(jsonSave)
+            jsonFile.close()
