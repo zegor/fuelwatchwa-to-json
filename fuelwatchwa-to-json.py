@@ -5,7 +5,7 @@ import xmltodict
 import urllib.request
 import shutil
 
-# Store date
+# Store dates
 todayDate = datetime.date.today()
 tomorrowDate = todayDate + datetime.timedelta(days=1)
 
