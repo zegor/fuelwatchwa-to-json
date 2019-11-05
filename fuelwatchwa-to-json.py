@@ -41,18 +41,20 @@ Day = {
     "yesterday": "yesterday"
 }
 
-# Loop through all Products and State Regions and get today's prices
+# Loop through all Products and State Regions and get tomorrow's prices
 for x in Product:
     for y in StateRegion:
         rssURL = rssBase + "?Product=" + str(Product[x]) + "&StateRegion=" + str(StateRegion[y]) + "&Day=" + Day["tomorrow"]
 
         # Open FuelWatch RSS feed and save as XML file
-        with urllib.request.urlopen(rssURL) as response, open("files/" + str(tomorrowDate) + "/fuelWatchRSS_" + x + "_" + y + ".xml", "wb") as xmlSave:
-            shutil.copyfileobj(response, xmlSave)
+        pathXML = "files/xml/" + str(tomorrowDate) + "/fuelWatchRSS_" + x + "_" + y + ".xml"
+        with urllib.request.urlopen(rssURL) as response, open(pathXML, "wb") as saveXML:
+            shutil.copyfileobj(response, saveXML)
 
         # Open FuelWatch XML file and save as JSON file
-        with open("files/" + str(tomorrowDate) + "/fuelWatchRSS_" + x + "_" + y + ".xml") as xmlIn:
-            jsonSave = json.dumps(xmltodict.parse(xmlIn.read()), indent=4)
-            jsonFile = open("files/" + str(tomorrowDate) + "/fuelWatchRSS_" + x + "_" + y + ".json", "w")
-            jsonFile.write(jsonSave)
-            jsonFile.close()
+        pathJSON = "files/json/" + str(tomorrowDate) + "/fuelWatchRSS_" + x + "_" + y + ".json"
+        with open(pathXML) as inXML:
+            inJSON = json.dumps(xmltodict.parse(inXML.read()), indent=4)
+            saveJSON = open(pathJSON, "w")
+            saveJSON.write(inJSON)
+            saveJSON.close()
